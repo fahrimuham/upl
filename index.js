@@ -19,7 +19,7 @@ const upload = multer({ storage: storage });
 
 // Menampilkan halaman utama
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'up.html'));
 });
 
 // Menangani permintaan unggah file
