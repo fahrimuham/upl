@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 // Menentukan lokasi penyimpanan file yang diunggah
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, '/uploads')
+    cb(null, 'uploads/')
   },
   filename: function (req, file, cb) {
     const filename = uuidv4(); // Membuat nama file secara acak
@@ -22,11 +22,11 @@ const upload = multer({ storage: storage });
 
 // Menampilkan halaman utama
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, './app/index.html'));
+  res.sendFile(path.join(__dirname, './app/index.html')); // Ubah path untuk mengakses file index.html
 });
 
 // Menangani permintaan unggah file
-app.post('/uploads', upload.single('file'), (req, res) => {
+app.post('/upload', upload.single('file'), (req, res) => { // Perbaiki endpoint menjadi '/upload'
   const uploadedFileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
   res.send(`File berhasil diunggah. URL: <a href="${uploadedFileUrl}">${uploadedFileUrl}</a>`);
 });
