@@ -19,12 +19,13 @@ const upload = multer({ storage: storage });
 
 // Menampilkan halaman utama
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'up.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Menangani permintaan unggah file
 app.post('/upload', upload.single('file'), (req, res) => {
-  res.send('File berhasil diunggah.');
+  const uploadedFileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.originalname}`;
+  res.send(`File berhasil diunggah. URL: <a href="${uploadedFileUrl}">${uploadedFileUrl}</a>`);
 });
 
 app.listen(PORT, () => {
