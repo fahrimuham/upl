@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 });
 
 // Menangani permintaan unggah file
-app.post('/upload', upload.single('file'), (req, res) => {
+app.post('/uploads', upload.single('file'), (req, res) => {
   const uploadedFileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.originalname}`;
   res.send(`File berhasil diunggah. URL: <a href="${uploadedFileUrl}">${uploadedFileUrl}</a>`);
 });
