@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const { v4: uuidv4 } = require('uuid');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -8,10 +9,12 @@ const PORT = process.env.PORT || 3000;
 // Menentukan lokasi penyimpanan file yang diunggah
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/')
+    cb(null, '/uploads')
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname)
+    const filename = uuidv4(); // Membuat nama file secara acak
+    const fileExtension = path.extname(file.originalname);
+    cb(null, filename + fileExtension);
   }
 });
 
@@ -24,9 +27,12 @@ app.get('/', (req, res) => {
 
 // Menangani permintaan unggah file
 app.post('/uploads', upload.single('file'), (req, res) => {
-  const uploadedFileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.originalname}`;
+  const uploadedFileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
   res.send(`File berhasil diunggah. URL: <a href="${uploadedFileUrl}">${uploadedFileUrl}</a>`);
 });
+
+// Menangani permintaan GET untuk file yang diunggah
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.listen(PORT, () => {
   console.log(`Server berjalan di port ${PORT}`);
